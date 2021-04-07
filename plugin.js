@@ -1,12 +1,15 @@
 CKEDITOR.plugins.add('kbd', {
+	requires: 'dialog,smethods',
 	lang: 'en,ru,uk',
 	icons: 'kbd',
 	init: function(editor){
 		editor.addCommand('kbd', {
 			exec: function(editor){
-				var kbd = editor.document.createElement('kbd');
-				kbd.setText(editor.getSelection().getSelectedText());
-				editor.insertElement(kbd);
+				var selection = editor.getSelection().getSelectedText();
+
+				selection
+					? editor.insertElement(CKEDITOR.dom.element.createFromHtml('<kbd>' + selection + '</kbd>'))
+					: editor.openDialog('kbdDialog');
 			}
 		});
 
@@ -14,5 +17,9 @@ CKEDITOR.plugins.add('kbd', {
 			label: editor.lang.kbd.label,
 			command: 'kbd'
 		});
+
+		CKEDITOR.dialog.add('kbdDialog', this.path + 'dialogs/kbd.js');
+
 	}
 });
+
